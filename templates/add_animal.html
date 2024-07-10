@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un animal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Ajouter un animal en adoption</h1>
+    <form id="addAnimalForm" action="{{ url_for('add_animal') }}" method="post">
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom">
+        <span id="nomError" class="error"></span><br>
+
+        <label for="espece">Espèce :</label>
+        <input type="text" id="espece" name="espece">
+        <span id="especeError" class="error"></span><br>
+
+        <label for="race">Race :</label>
+        <input type="text" id="race" name="race">
+        <span id="raceError" class="error"></span><br>
+
+        <label for="age">Âge :</label>
+        <input type="number" id="age" name="age">
+        <span id="ageError" class="error"></span><br>
+
+        <label for="description">Description :</label>
+        <textarea id="description" name="description"></textarea>
+        <span id="descriptionError" class="error"></span><br>
+
+        <label for="courriel">Courriel :</label>
+        <input type="email" id="courriel" name="courriel">
+        <span id="courrielError" class="error"></span><br>
+
+        <label for="adresse">Adresse :</label>
+        <input type="text" id="adresse" name="adresse">
+        <span id="adresseError" class="error"></span><br>
+
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville">
+        <span id="villeError" class="error"></span><br>
+
+        <label for="cp">Code Postal :</label>
+        <input type="text" id="cp" name="cp">
+        <span id="cpError" class="error"></span><br>
+
+        <button type="submit">Ajouter</button>
+    </form>
+    <a href="{{ url_for('index') }}">Retour à la liste</a>
+</body>
+</html>
