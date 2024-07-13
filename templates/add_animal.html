@@ -7,41 +7,44 @@
 </head>
 <body>
     <h1>Ajouter un animal en adoption</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
     <form id="addAnimalForm" action="{{ url_for('add_animal') }}" method="post">
         <label for="nom">Nom :</label>
-        <input type="text" id="nom" name="nom">
+        <input type="text" id="nom" name="nom" required>
         <span id="nomError" class="error"></span><br>
 
         <label for="espece">Espèce :</label>
-        <input type="text" id="espece" name="espece">
+        <input type="text" id="espece" name="espece" required>
         <span id="especeError" class="error"></span><br>
 
         <label for="race">Race :</label>
-        <input type="text" id="race" name="race">
+        <input type="text" id="race" name="race" required>
         <span id="raceError" class="error"></span><br>
 
         <label for="age">Âge :</label>
-        <input type="number" id="age" name="age">
+        <input type="number" id="age" name="age" required>
         <span id="ageError" class="error"></span><br>
 
         <label for="description">Description :</label>
-        <textarea id="description" name="description"></textarea>
+        <textarea id="description" name="description" required></textarea>
         <span id="descriptionError" class="error"></span><br>
 
         <label for="courriel">Courriel :</label>
-        <input type="email" id="courriel" name="courriel">
+        <input type="email" id="courriel" name="courriel" required>
         <span id="courrielError" class="error"></span><br>
 
         <label for="adresse">Adresse :</label>
-        <input type="text" id="adresse" name="adresse">
+        <input type="text" id="adresse" name="adresse" required>
         <span id="adresseError" class="error"></span><br>
 
         <label for="ville">Ville :</label>
-        <input type="text" id="ville" name="ville">
+        <input type="text" id="ville" name="ville" required>
         <span id="villeError" class="error"></span><br>
 
         <label for="cp">Code Postal :</label>
-        <input type="text" id="cp" name="cp">
+        <input type="text" id="cp" name="cp" required>
         <span id="cpError" class="error"></span><br>
 
         <button type="submit">Ajouter</button>

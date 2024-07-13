@@ -73,3 +73,40 @@ def search():
         return render_template('search_results.html', results=results)
     else:
         return render_template('search_results.html', results=[])
+@app.route('/add_animal', methods=['GET', 'POST'])
+def add_animal():
+    if request.method == 'POST':
+        try:
+            nom = request.form['nom']
+            espece = request.form['espece']
+            race = request.form['race']
+            age = request.form['age']
+            description = request.form['description']
+            courriel = request.form['courriel']
+            adresse = request.form['adresse']
+            ville = request.form['ville']
+            cp = request.form['cp']
+
+            # Validation côté serveur
+            if not all([nom, espece, race, age, description, courriel, adresse, ville, cp]):
+                return render_template('add_animal.html', error="Tous les champs sont obligatoires.")
+            if len(nom) < 3 or len(nom) > 20:
+                return render_template('add_animal.html', error="Le nom doit avoir entre 3 et 20 caractères.")
+            if not age.isdigit() or int(age) < 0 or int(age) > 30:
+                return render_template('add_animal.html', error="L'âge doit être une valeur numérique entre 0 et 30.")
+            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(email_pattern, courriel):
+                return render_template('add_animal.html', error="Le courriel doit avoir un format valide.")
+            postal_code_pattern = r'^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$'
+            if not re.match(postal_code_pattern, cp):
+                return render_template('add_animal.html', error="Le code postal doit avoir un format canadien valide.")
+
+            conn = get_db_connection()
+            conn.execute('INSERT INTO animals (nom, espece, race, age, description, courriel, adresse, ville, cp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (nom, espece, race, age, description, courriel, adresse, ville, cp))
+            conn.commit()
+            conn.close()
+            return redirect(url_for('index'))
+        except Exception as e:
+            return render_template('add_animal.html', error="Une erreur s'est produite lors de l'ajout de l'animal.")
+    return render_template('add_animal.html')
