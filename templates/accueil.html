@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Adoption d'Animaux</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Adoption d'Animaux</h1>
+
+<h2>Animaux disponibles</h2>
+<ul>
+{% for animal in animaux %}
+    <li><a href="{{ url_for('animal', id=animal['id']) }}">{{ animal['nom'] }} - {{ animal['espece'] }}</a></li>
+{% endfor %}
+</ul>
+
+<form action="{{ url_for('recherche') }}" method="get">
+    <input type="text" name="requete" placeholder="Rechercher un animal">
+    <button type="submit">Rechercher</button>
+</form>
+
+<a href="{{ url_for('ajouter_animal') }}">Ajouter un animal en adoption</a>
+</body>
+</html>

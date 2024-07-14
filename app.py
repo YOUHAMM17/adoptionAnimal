@@ -7,41 +7,41 @@ app = Flask(__name__)
 
 logging.basicConfig(level=logging.DEBUG)
 
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
+def obtenir_connexion_bd():
+    conn = sqlite3.connect('base_de_donnees.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 @app.route('/')
-def index():
-    conn = get_db_connection()
-    animals = conn.execute('SELECT * FROM animals ORDER BY RANDOM() LIMIT 5').fetchall()
+def accueil():
+    conn = obtenir_connexion_bd()
+    animaux = conn.execute('SELECT * FROM animaux ORDER BY RANDOM() LIMIT 5').fetchall()
     conn.close()
-    return render_template('index.html', animals=animals)
+    return render_template('accueil.html', animaux=animaux)
 
 @app.route('/animal/<int:id>')
 def animal(id):
-    conn = get_db_connection()
-    animal = conn.execute('SELECT * FROM animals WHERE id = ?', (id,)).fetchone()
+    conn = obtenir_connexion_bd()
+    animal = conn.execute('SELECT * FROM animaux WHERE id = ?', (id,)).fetchone()
     conn.close()
     return render_template('animal.html', animal=animal)
 
-@app.route('/search')
-def search():
-    query = request.args.get('query')
-    logging.debug(f"Recherche pour le terme: {query}")
-    if query:
-        conn = get_db_connection()
-        results = conn.execute('SELECT * FROM animals WHERE nom LIKE ? OR espece LIKE ? OR race LIKE ? OR description LIKE ?',
-                               ('%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%')).fetchall()
-        logging.debug(f"Nombre de résultats: {len(results)}")
+@app.route('/recherche')
+def recherche():
+    requete = request.args.get('requete')
+    logging.debug(f"Recherche pour le terme: {requete}")
+    if requete:
+        conn = obtenir_connexion_bd()
+        resultats = conn.execute('SELECT * FROM animaux WHERE nom LIKE ? OR espece LIKE ? OR race LIKE ? OR description LIKE ?',
+                               ('%' + requete + '%', '%' + requete + '%', '%' + requete + '%', '%' + requete + '%')).fetchall()
+        logging.debug(f"Nombre de résultats: {len(resultats)}")
         conn.close()
-        return render_template('search_results.html', results=results)
+        return render_template('resultats_recherche.html', resultats=resultats)
     else:
-        return render_template('search_results.html', results=[])
+        return render_template('resultats_recherche.html', resultats=[])
 
-@app.route('/add_animal', methods=['GET', 'POST'])
-def add_animal():
+@app.route('/ajouter_animal', methods=['GET', 'POST'])
+def ajouter_animal():
     if request.method == 'POST':
         try:
             nom = request.form['nom']
@@ -52,32 +52,32 @@ def add_animal():
             courriel = request.form['courriel']
             adresse = request.form['adresse']
             ville = request.form['ville']
-            cp = request.form['cp']
+            code_postal = request.form['code_postal']
 
             # Validation côté serveur
-            if not all([nom, espece, race, age, description, courriel, adresse, ville, cp]):
-                return render_template('add_animal.html', error="Tous les champs sont obligatoires.")
+            if not all([nom, espece, race, age, description, courriel, adresse, ville, code_postal]):
+                return render_template('ajouter_animal.html', erreur="Tous les champs sont obligatoires.")
             if len(nom) < 3 or len(nom) > 20:
-                return render_template('add_animal.html', error="Le nom doit avoir entre 3 et 20 caractères.")
+                return render_template('ajouter_animal.html', erreur="Le nom doit avoir entre 3 et 20 caractères.")
             if not age.isdigit() or int(age) < 0 or int(age) > 30:
-                return render_template('add_animal.html', error="L'âge doit être une valeur numérique entre 0 et 30.")
-            email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-            if not re.match(email_pattern, courriel):
-                return render_template('add_animal.html', error="Le courriel doit avoir un format valide.")
-            postal_code_pattern = r'^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$'
-            if not re.match(postal_code_pattern, cp):
-                return render_template('add_animal.html', error="Le code postal doit avoir un format canadien valide.")
+                return render_template('ajouter_animal.html', erreur="L'âge doit être une valeur numérique entre 0 et 30.")
+            motif_courriel = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(motif_courriel, courriel):
+                return render_template('ajouter_animal.html', erreur="Le courriel doit avoir un format valide.")
+            motif_code_postal = r'^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$'
+            if not re.match(motif_code_postal, code_postal):
+                return render_template('ajouter_animal.html', erreur="Le code postal doit avoir un format canadien valide.")
 
-            conn = get_db_connection()
-            conn.execute('INSERT INTO animals (nom, espece, race, age, description, courriel, adresse, ville, cp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         (nom, espece, race, age, description, courriel, adresse, ville, cp))
+            conn = obtenir_connexion_bd()
+            conn.execute('INSERT INTO animaux (nom, espece, race, age, description, courriel, adresse, ville, code_postal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (nom, espece, race, age, description, courriel, adresse, ville, code_postal))
             conn.commit()
             conn.close()
-            return redirect(url_for('index'))
+            return redirect(url_for('accueil'))
         except Exception as e:
             logging.error(f"Erreur lors de l'ajout de l'animal : {e}")
-            return render_template('add_animal.html', error="Une erreur s'est produite lors de l'ajout de l'animal.")
-    return render_template('add_animal.html')
+            return render_template('ajouter_animal.html', erreur="Une erreur s'est produite lors de l'ajout de l'animal.")
+    return render_template('ajouter_animal.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

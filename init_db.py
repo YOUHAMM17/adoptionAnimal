@@ -1,7 +1,7 @@
 import sqlite3
 
-conn = sqlite3.connect('database.db')
-conn.execute('''CREATE TABLE animals (
+conn = sqlite3.connect('base_de_donnees.db')
+conn.execute('''CREATE TABLE animaux (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nom TEXT NOT NULL,
     espece TEXT NOT NULL,
@@ -11,6 +11,6 @@ conn.execute('''CREATE TABLE animals (
     courriel TEXT NOT NULL,
     adresse TEXT NOT NULL,
     ville TEXT NOT NULL,
-    cp TEXT NOT NULL
+    code_postal TEXT NOT NULL
 )''')
 conn.close()

@@ -7,49 +7,53 @@
 </head>
 <body>
     <h1>Ajouter un animal en adoption</h1>
-    {% if error %}
-        <p class="error">{{ error }}</p>
+
+    {% if erreur %}
+        <p class="erreur">{{ erreur }}</p>
     {% endif %}
-    <form id="addAnimalForm" action="{{ url_for('add_animal') }}" method="post">
+    
+    <form id="ajouterAnimalForm" action="{{ url_for('ajouter_animal') }}" method="post">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" required>
-        <span id="nomError" class="error"></span><br>
-
+        <span id="nomErreur" class="erreur"></span>
+    
         <label for="espece">Espèce :</label>
         <input type="text" id="espece" name="espece" required>
-        <span id="especeError" class="error"></span><br>
-
+        <span id="especeErreur" class="erreur"></span>
+    
         <label for="race">Race :</label>
         <input type="text" id="race" name="race" required>
-        <span id="raceError" class="error"></span><br>
-
+        <span id="raceErreur" class="erreur"></span>
+    
         <label for="age">Âge :</label>
         <input type="number" id="age" name="age" required>
-        <span id="ageError" class="error"></span><br>
-
+        <span id="ageErreur" class="erreur"></span>
+    
         <label for="description">Description :</label>
         <textarea id="description" name="description" required></textarea>
-        <span id="descriptionError" class="error"></span><br>
-
+        <span id="descriptionErreur" class="erreur"></span>
+    
         <label for="courriel">Courriel :</label>
         <input type="email" id="courriel" name="courriel" required>
-        <span id="courrielError" class="error"></span><br>
-
+        <span id="courrielErreur" class="erreur"></span>
+    
         <label for="adresse">Adresse :</label>
         <input type="text" id="adresse" name="adresse" required>
-        <span id="adresseError" class="error"></span><br>
-
+        <span id="adresseErreur" class="erreur"></span>
+    
         <label for="ville">Ville :</label>
         <input type="text" id="ville" name="ville" required>
-        <span id="villeError" class="error"></span><br>
-
-        <label for="cp">Code Postal :</label>
-        <input type="text" id="cp" name="cp" required>
-        <span id="cpError" class="error"></span><br>
-
+        <span id="villeErreur" class="erreur"></span>
+    
+        <label for="code_postal">Code Postal :</label>
+        <input type="text" id="code_postal" name="code_postal" required>
+        <span id="codePostalErreur" class="erreur"></span>
+    
         <button type="submit">Ajouter</button>
     </form>
-    <a href="{{ url_for('index') }}">Retour à la liste</a>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <a href="{{ url_for('accueil') }}">Retour à la liste</a>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-document.getElementById('addAnimalForm').addEventListener('submit', function(event) {
+document.getElementById('ajouterAnimalForm').addEventListener('submit', function(event) {
     let valid = true;
 
     let nom = document.getElementById('nom').value;
@@ -9,7 +9,7 @@ document.getElementById('addAnimalForm').addEventListener('submit', function(eve
     let courriel = document.getElementById('courriel').value;
     let adresse = document.getElementById('adresse').value;
     let ville = document.getElementById('ville').value;
-    let cp = document.getElementById('cp').value;
+    let code_postal = document.getElementById('code_postal').value;
 
     // Réinitialiser les messages d'erreur
     document.getElementById('nomError').textContent = '';
@@ -20,7 +20,7 @@ document.getElementById('addAnimalForm').addEventListener('submit', function(eve
     document.getElementById('courrielError').textContent = '';
     document.getElementById('adresseError').textContent = '';
     document.getElementById('villeError').textContent = '';
-    document.getElementById('cpError').textContent = '';
+    document.getElementById('codePostalErreur').textContent = '';
 
     // Validation des champs
     if (nom.length < 3 || nom.length > 20) {
@@ -55,9 +55,9 @@ document.getElementById('addAnimalForm').addEventListener('submit', function(eve
     }
 
     let postalCodePattern = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-    if (!postalCodePattern.test(cp)) {
+    if (!postalCodePattern.test(code_postal)) {
         valid = false;
-        document.getElementById('cpError').textContent = 'Le code postal doit avoir un format canadien valide.';
+        document.getElementById('codePostalErreur').textContent = 'Le code postal doit avoir un format canadien valide.';
     }
 
     if (adresse.length === 0) {
