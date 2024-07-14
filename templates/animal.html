@@ -2,17 +2,44 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{{ animal['nom'] }} - Détails</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ animal['nom'] }} - Détails de l'animal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>{{ animal['nom'] }}</h1>
-    <p><strong>Espèce :</strong> {{ animal['espece'] }}</p>
-    <p><strong>Race :</strong> {{ animal['race'] }}</p>
-    <p><strong>Âge :</strong> {{ animal['age'] }} ans</p>
-    <p><strong>Description :</strong> {{ animal['description'] }}</p>
-    <p><strong>Adresse :</strong> {{ animal['adresse'] }}, {{ animal['ville'] }}, {{ animal['cp'] }}</p>
-    <p><strong>Contact :</strong> <a href="mailto:{{ animal['courriel'] }}">{{ animal['courriel'] }}</a></p>
-    <a href="{{ url_for('index') }}">Retour à la liste</a>
+    <div class="container">
+        <div class="animal-details">
+            <h1>{{ animal['nom'] }}</h1>
+            
+            <div class="info-group">
+                <strong>Espèce :</strong> {{ animal['espece'] }}
+            </div>
+            
+            <div class="info-group">
+                <strong>Race :</strong> {{ animal['race'] }}
+            </div>
+            
+            <div class="info-group">
+                <strong>Âge :</strong> {{ animal['age'] }} ans
+            </div>
+            
+            <div class="description">
+                <strong>Description :</strong>
+                <p>{{ animal['description'] }}</p>
+            </div>
+            
+            <div class="contact-info">
+                <h2>Informations de contact</h2>
+                <div class="info-group">
+                    <strong>Adresse :</strong> {{ animal['adresse'] }}, {{ animal['ville'] }}, {{ animal['cp'] }}
+                </div>
+                <div class="info-group">
+                    <strong>Contact :</strong> <a href="mailto:{{ animal['courriel'] }}">{{ animal['courriel'] }}</a>
+                </div>
+            </div>
+        </div>
+        
+        <a href="{{ url_for('accueil') }}" class="btn">Retour à la liste</a>
+    </div>
 </body>
 </html>

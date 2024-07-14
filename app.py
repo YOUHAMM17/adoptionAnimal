@@ -15,7 +15,7 @@ def obtenir_connexion_bd():
 @app.route('/')
 def accueil():
     conn = obtenir_connexion_bd()
-    animaux = conn.execute('SELECT * FROM animaux ORDER BY RANDOM() LIMIT 5').fetchall()
+    animaux = conn.execute('SELECT * FROM animaux ORDER BY RANDOM() LIMIT 6').fetchall()
     conn.close()
     return render_template('accueil.html', animaux=animaux)
 

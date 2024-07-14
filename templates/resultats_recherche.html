@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Résultats de la recherche</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Résultats de la recherche</h1>
+    <div class="container">
+        <div class="search-results">
+            <h1>Résultats de la recherche</h1>
 
-<ul>
-{% for resultat in resultats %}
-    <li>
-        <a href="{{ url_for('animal', id=resultat['id']) }}">{{ resultat['nom'] }} - {{ resultat['espece'] }}</a>
-        <p>{{ resultat['description'] }}</p>
-    </li>
-{% endfor %}
-</ul>
+            {% for resultat in resultats %}
+                <div class="result-item">
+                    <h3>
+                        <a href="{{ url_for('animal', id=resultat['id']) }}">{{ resultat['nom'] }} - {{ resultat['espece'] }}</a>
+                    </h3>
+                    <p>{{ resultat['description'] }}</p>
+                </div>
+            {% endfor %}
 
-<a href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+            {% if not resultats %}
+                <p>Aucun résultat trouvé.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('accueil') }}" class="btn">Retour à l'accueil</a>
+    </div>
 </body>
 </html>

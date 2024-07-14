@@ -1,0 +1,377 @@
+// Variables
+$colors: (
+  primary: #3498db,
+  secondary: #2ecc71,
+  accent: #e74c3c,
+  background: #f4f4f4,
+  text: #333,
+  light: #fff,
+  dark: #2c3e50,
+  gradient-start: #6dd5ed,
+  gradient-end: #2193b0
+);
+
+$font-weights: (
+  light: 300,
+  regular: 400,
+  medium: 500,
+  bold: 700
+);
+
+$breakpoints: (
+  small: 576px,
+  medium: 768px,
+  large: 992px,
+  xlarge: 1200px
+);
+
+// Functions
+@function color($color-name) {
+  @return map-get($colors, $color-name);
+}
+
+@function weight($weight-name) {
+  @return map-get($font-weights, $weight-name);
+}
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin gradient-background {
+  background: linear-gradient(to right, color(gradient-start), color(gradient-end));
+}
+
+@mixin button($bg-color: color(primary), $text-color: color(light)) {
+  display: inline-block;
+  padding: 0.8em 1.5em;
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: 30px;
+  font-weight: weight(medium);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    background-color: darken($bg-color, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@mixin card {
+  background-color: color(light);
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: color(text);
+  background-color: color(background);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Typography
+h1, h2, h3 {
+  margin-bottom: 1rem;
+  font-weight: weight(bold);
+}
+
+// Navigation
+nav {
+  @include gradient-background;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .container {
+    @include flex-center;
+    justify-content: space-between;
+  }
+
+  a {
+    color: color(light);
+    text-decoration: none;
+    font-weight: weight(medium);
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: color(accent);
+    }
+
+    &.btn {
+      @include button(color(secondary));
+    }
+  }
+}
+
+// Buttons
+.btn {
+  @include button;
+}
+
+// Forms
+form {
+  @include card;
+  & {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid lighten(color(text), 50%);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: color(primary);
+      box-shadow: 0 0 0 3px rgba(color(primary), 0.2);
+    }
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: weight(medium);
+  }
+
+  button {
+    @include button;
+  }
+}
+
+// Animal list (Page d'accueil)
+.animal-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  
+  .animal-item {
+    @include card;
+    & {
+      padding: 0;
+    }
+
+    .animal-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .animal-content {
+      padding: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: lighten(color(text), 20%);
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: color(primary);
+      text-decoration: none;
+      font-weight: weight(medium);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: darken(color(primary), 15%);
+      }
+    }
+  }
+}
+
+// Page de détails d'un animal
+.animal-details {
+  @include card;
+  & {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    color: color(primary);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-group {
+    display: flex;
+    margin-bottom: 1rem;
+
+    strong {
+      min-width: 120px;
+      font-weight: weight(medium);
+      color: color(secondary);
+    }
+  }
+
+  .description {
+    margin: 1.5rem 0;
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+
+  .contact-info {
+    background-color: lighten(color(primary), 40%);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+
+    h2 {
+      color: color(primary);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: color(primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        color: darken(color(primary), 15%);
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Résultats de recherche
+.search-results {
+  @include card;
+  & {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    color: color(primary);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .result-item {
+    border-bottom: 1px solid lighten(color(text), 60%);
+    padding: 1.5rem 0;
+    transition: all 0.3s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: lighten(color(background), 3%);
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: lighten(color(text), 20%);
+      margin-bottom: 1rem;
+    }
+
+    a {
+      @include button(color(primary), color(light));
+      & {
+        font-size: 0.9rem;
+        padding: 0.5em 1em;
+      }
+    }
+  }
+}
+
+// Messages d'erreur
+.erreur {
+  color: color(accent);
+  font-size: 0.9em;
+  margin-top: 0.25rem;
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+// Responsive design
+@include responsive(medium) {
+  .container {
+    width: 85%;
+  }
+}
+
+@include responsive(large) {
+  .container {
+    width: 80%;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+// Utility classes
+.text-center { text-align: center; }
+.mt-2 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 2rem; }
