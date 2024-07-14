@@ -1,6 +1,7 @@
-import logging
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import logging
+import re
 
 app = Flask(__name__)
 
@@ -28,51 +29,17 @@ def animal(id):
 @app.route('/search')
 def search():
     query = request.args.get('query')
-    conn = get_db_connection()
-    results = conn.execute('SELECT * FROM animals WHERE nom LIKE ?', ('%' + query + '%',)).fetchall()
-    conn.close()
-    return render_template('search_results.html', results=results)
-
-@app.route('/add_animal', methods=['GET', 'POST'])
-def add_animal():
-    if request.method == 'POST':
-        try:
-            nom = request.form['nom']
-            espece = request.form['espece']
-            race = request.form['race']
-            age = request.form['age']
-            description = request.form['description']
-            courriel = request.form['courriel']
-            adresse = request.form['adresse']
-            ville = request.form['ville']
-            cp = request.form['cp']
-
-            logging.debug(f"Nom: {nom}, Espece: {espece}, Race: {race}, Age: {age}, Description: {description}, Courriel: {courriel}, Adresse: {adresse}, Ville: {ville}, CP: {cp}")
-
-            conn = get_db_connection()
-            conn.execute('INSERT INTO animals (nom, espece, race, age, description, courriel, adresse, ville, cp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         (nom, espece, race, age, description, courriel, adresse, ville, cp))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('index'))
-        except Exception as e:
-            logging.error(f"Erreur lors de l'ajout de l'animal : {e}")
-            return render_template('add_animal.html', error="Une erreur s'est produite lors de l'ajout de l'animal.")
-    return render_template('add_animal.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
-@app.route('/search')
-def search():
-    query = request.args.get('query')
+    logging.debug(f"Recherche pour le terme: {query}")
     if query:
         conn = get_db_connection()
         results = conn.execute('SELECT * FROM animals WHERE nom LIKE ? OR espece LIKE ? OR race LIKE ? OR description LIKE ?',
                                ('%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%')).fetchall()
+        logging.debug(f"Nombre de résultats: {len(results)}")
         conn.close()
         return render_template('search_results.html', results=results)
     else:
         return render_template('search_results.html', results=[])
+
 @app.route('/add_animal', methods=['GET', 'POST'])
 def add_animal():
     if request.method == 'POST':
@@ -108,5 +75,9 @@ def add_animal():
             conn.close()
             return redirect(url_for('index'))
         except Exception as e:
+            logging.error(f"Erreur lors de l'ajout de l'animal : {e}")
             return render_template('add_animal.html', error="Une erreur s'est produite lors de l'ajout de l'animal.")
     return render_template('add_animal.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
